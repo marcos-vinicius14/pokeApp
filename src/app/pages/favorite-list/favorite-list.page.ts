@@ -1,40 +1,75 @@
 import { Component, OnInit } from '@angular/core';
 import { FavoritesService } from '../../services/favorites.service';
 import { PokeapiService } from '../../services/pokeapi.service';
-import { forkJoin } from 'rxjs';
-import { PokemonDetailsResponse } from 'src/app/interfaces/PokemonDetailsResponse';
+import { forkJoin, Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+// 1. Importa todos os componentes Ionic necessários
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonAvatar,
+  IonLabel,
+  IonIcon // A importação que faltava
+} from '@ionic/angular/standalone';
+
+export interface PokemonDetail {
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
+}
 
 @Component({
   selector: 'app-favorites-list',
-  templateUrl: './favorites-list.page.html',
-  styleUrls: ['./favorites-list.page.scss'],
+  templateUrl: './favorite-list.page.html',
+  styleUrls: ['./favorite-list.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonAvatar,
+    IonLabel,
+    IonIcon
+  ],
 })
 export class FavoritesListPage implements OnInit {
-   favoritePokemons: PokemonDetailsResponse[] = [];
+  public favoritePokemons: PokemonDetail[] = [];
 
   constructor(
     private favoritesService: FavoritesService,
     private pokeapiService: PokeapiService
   ) {}
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.loadFavorites();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit(): void {}
 
-  loadFavorites() {
+  loadFavorites(): void {
     this.favoritePokemons = [];
-    const favoriteIds = this.favoritesService.getFavorites();
+    const favoriteIds: number[] = this.favoritesService.getFavorites();
 
-    if (favoriteIds[0]) {
-      return; 
+    if (favoriteIds.length === 0) {
+      return;
     }
 
-    const requests = favoriteIds.map(id => this.pokeapiService.getPokemonDetails(id.toString()));
+    const requests: Observable<PokemonDetail>[] = favoriteIds.map(id => this.pokeapiService.getPokemonDetails(id.toString()));
 
-    forkJoin(requests).subscribe(pokemonsDetails => {
+    forkJoin(requests).subscribe((pokemonsDetails: PokemonDetail[]) => {
       this.favoritePokemons = pokemonsDetails;
     });
   }
