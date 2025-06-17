@@ -39,7 +39,7 @@ export class PokeapiService {
 
 
 
-  getPokemonDetails(name: string): Observable<any> {
+  getPokemonDetails(pokemonName: string | null): Observable<any> {
     return this.http.get(`${this.baseUrl}/pokemon/${name}`);
   }
 }
