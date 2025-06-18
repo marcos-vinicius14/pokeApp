@@ -1,30 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FavoritesService } from '../../services/favorites.service';
-import { PokeapiService } from '../../services/pokeapi.service';
-import { forkJoin, Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { Subscription, forkJoin, Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonList,
-  IonItem,
-  IonAvatar,
-  IonLabel,
-  IonIcon 
+  IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem,
+  IonAvatar, IonLabel, IonIcon
 } from '@ionic/angular/standalone';
+import { PokeapiService } from '../../services/pokeapi.service';
+import { FavoritesService } from '../../services/favorites.service';
 import { Pokemon } from 'src/app/interfaces/Pokemon';
-
-export interface PokemonDetail {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string;
-  };
-}
 
 @Component({
   selector: 'app-favorites-list',
@@ -32,45 +17,36 @@ export interface PokemonDetail {
   styleUrls: ['./favorite-list.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonList,
-    IonItem,
-    IonAvatar,
-    IonLabel,
-    IonIcon
+    CommonModule, RouterModule, IonHeader, IonToolbar, IonTitle,
+    IonContent, IonList, IonItem, IonAvatar, IonLabel, IonIcon
   ],
 })
-export class FavoritesListPage implements OnInit {
+export class FavoritesListPage implements OnInit, OnDestroy {
   public favoritePokemons: Pokemon[] = [];
+  private favoritesSub: Subscription = new Subscription();
 
   constructor(
     private favoritesService: FavoritesService,
     private pokeapiService: PokeapiService
   ) {}
 
-  ionViewWillEnter(): void {
-    this.loadFavorites();
-  }
-
-  ngOnInit(): void {}
-
-  loadFavorites(): void {
-    this.favoritePokemons = [];
-    const favoriteIds: number[] = this.favoritesService.getFavorites();
-
-    if (favoriteIds.length === 0) {
-      return;
-    }
-
-    const requests: Observable<Pokemon>[] = favoriteIds.map(id => this.pokeapiService.getPokemonDetails(id.toString()));
-
-    forkJoin(requests).subscribe((pokemonsDetails: Pokemon[]) => {
+  public ngOnInit(): void {
+    this.favoritesSub = this.favoritesService.getFavoritesObservable().pipe(
+      switchMap((ids: number[]) => {
+        if (ids.length === 0) {
+          return of([]);
+        }
+        const requests = ids.map(id => this.pokeapiService.getPokemonDetails(id.toString()));
+        return forkJoin(requests);
+      })
+    ).subscribe(pokemonsDetails => {
       this.favoritePokemons = pokemonsDetails;
     });
+  }
+
+  public ngOnDestroy(): void {
+    if (this.favoritesSub) {
+      this.favoritesSub.unsubscribe();
+    }
   }
 }
