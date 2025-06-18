@@ -25,7 +25,7 @@
       <div class="main-card">
         <img [src]="officialArtworkUrl" [alt]="pokemon.name" class="main-card__image"/>
         <h1 class="main-card__name">{{ pokemon.name }}</h1>
-        <p class="main-card__id">#{{ pokemon.id.toString().padStart(3, '0') }}</p>
+        <p class="main-card__id">#{{ formattedId }}</p>
 
         <div class="main-card__types">
           @for (typeInfo of pokemon.types; track typeInfo.slot) {

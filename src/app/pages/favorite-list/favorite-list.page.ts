@@ -5,7 +5,6 @@ import { forkJoin, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-// 1. Importa todos os componentes Ionic necessários
 import {
   IonHeader,
   IonToolbar,
@@ -15,8 +14,9 @@ import {
   IonItem,
   IonAvatar,
   IonLabel,
-  IonIcon // A importação que faltava
+  IonIcon 
 } from '@ionic/angular/standalone';
+import { Pokemon } from 'src/app/interfaces/Pokemon';
 
 export interface PokemonDetail {
   id: number;
@@ -46,7 +46,7 @@ export interface PokemonDetail {
   ],
 })
 export class FavoritesListPage implements OnInit {
-  public favoritePokemons: PokemonDetail[] = [];
+  public favoritePokemons: Pokemon[] = [];
 
   constructor(
     private favoritesService: FavoritesService,
@@ -67,9 +67,9 @@ export class FavoritesListPage implements OnInit {
       return;
     }
 
-    const requests: Observable<PokemonDetail>[] = favoriteIds.map(id => this.pokeapiService.getPokemonDetails(id.toString()));
+    const requests: Observable<Pokemon>[] = favoriteIds.map(id => this.pokeapiService.getPokemonDetails(id.toString()));
 
-    forkJoin(requests).subscribe((pokemonsDetails: PokemonDetail[]) => {
+    forkJoin(requests).subscribe((pokemonsDetails: Pokemon[]) => {
       this.favoritePokemons = pokemonsDetails;
     });
   }

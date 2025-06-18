@@ -20,11 +20,11 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonNote 
+  IonNote
 } from '@ionic/angular/standalone';
 import { PokemonAbilityInfo } from 'src/app/interfaces/PokemonAbilityInfo';
 import { PokemonTypeInfo } from 'src/app/interfaces/PokemonTypeInfo';
-import { PokemonDetailsResponse } from 'src/app/interfaces/PokemonDetailsResponse';
+import { Pokemon } from 'src/app/interfaces/Pokemon';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -39,7 +39,7 @@ import { PokemonDetailsResponse } from 'src/app/interfaces/PokemonDetailsRespons
   ],
 })
 export class PokemonDetailsPage implements OnInit {
-  public pokemon: PokemonDetailsResponse | null = null;
+  public pokemon: Pokemon | null = null;
   public officialArtworkUrl: string = '';
   public isFavorite: boolean = false;
   public geminiPokedexEntry: string | null = null;
@@ -49,12 +49,12 @@ export class PokemonDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private pokeapiService: PokeapiService,
     private favoritesService: FavoritesService
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     const pokemonName = this.route.snapshot.paramMap.get('name');
     if (pokemonName) {
-      this.pokeapiService.getPokemonDetails(pokemonName).subscribe((details: PokemonDetailsResponse) => {
+      this.pokeapiService.getPokemonDetails(pokemonName).subscribe((details: Pokemon) => {
         this.pokemon = details;
         if (details.sprites.other?.['official-artwork'].front_default) {
           this.officialArtworkUrl = details.sprites.other['official-artwork'].front_default;
@@ -62,6 +62,14 @@ export class PokemonDetailsPage implements OnInit {
         this.checkFavoriteStatus();
       });
     }
+  }
+
+
+  public get formattedId(): string {
+    if (this.pokemon && this.pokemon.id) {
+      return this.pokemon.id.toString().padStart(3, '0');
+    }
+    return '...';
   }
 
   public checkFavoriteStatus(): void {
@@ -104,19 +112,19 @@ Habilidades: ${abilities}`;
     try {
       const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
       const payload = { contents: chatHistory };
-      const apiKey = "" 
+      const apiKey = "sasa"
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
-      
+
       if (!response.ok) {
         throw new Error(`API Error: ${response.statusText}`);
       }
-      
+
       const result = await response.json();
 
       if (result.candidates && result.candidates.length > 0) {
