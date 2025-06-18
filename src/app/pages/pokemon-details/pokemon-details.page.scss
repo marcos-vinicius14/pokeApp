@@ -7,7 +7,6 @@
   --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-// Estilos do Cabeçalho
 ion-toolbar {
   --background: #ef4444;
   --color: #ffffff;
@@ -16,7 +15,6 @@ ion-toolbar {
   }
 }
 
-// Fundo da página e container principal
 ion-content {
   --background: var(--background-color);
 }
@@ -25,7 +23,6 @@ ion-content {
   padding: 1rem;
 }
 
-// Spinner de carregamento centralizado
 .loading-spinner {
   display: flex;
   justify-content: center;
@@ -33,7 +30,6 @@ ion-content {
   height: 100%;
 }
 
-// Card principal com a imagem
 .main-card {
   background: var(--card-background);
   padding: 1.5rem;
@@ -43,12 +39,12 @@ ion-content {
   margin-bottom: 1rem;
 
   &__image {
-    height: 12rem; // h-48
-    margin: -5rem auto 0 auto; // Efeito "para fora"
+    height: 12rem;
+    margin: -5rem auto 0 auto;
   }
 
   &__name {
-    font-size: 2.25rem; // text-4xl
+    font-size: 2.25rem;
     font-weight: bold;
     color: var(--text-primary);
     text-transform: capitalize;
@@ -56,7 +52,7 @@ ion-content {
   }
 
   &__id {
-    font-size: 1.125rem; // text-lg
+    font-size: 1.125rem;
     color: var(--text-secondary);
   }
 
@@ -67,8 +63,8 @@ ion-content {
     margin-top: 1rem;
 
     .type-chip {
-      --background: #e2e8f0; // bg-slate-200
-      --color: #334155; // text-slate-700
+      --background: #e2e8f0;
+      --color: #334155;
       font-weight: 600;
       text-transform: capitalize;
       border-radius: 9999px;
@@ -76,7 +72,6 @@ ion-content {
   }
 }
 
-// Cards de detalhes genéricos
 .details-card {
   background: var(--card-background);
   padding: 1.5rem;
@@ -85,7 +80,7 @@ ion-content {
   margin-bottom: 1rem;
 
   &__title {
-    font-size: 1.25rem; // text-xl
+    font-size: 1.25rem;
     font-weight: bold;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
@@ -98,7 +93,7 @@ ion-content {
 }
 
 .gemini-button {
-  --background: #2563eb; 
+  --background: #2563eb;
   --background-hover: #1d4ed8;
   --background-disabled: #94a3b8;
   --color: white;
@@ -110,7 +105,7 @@ ion-content {
 .gemini-result {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #e2e8f0; 
+  border-top: 1px solid #e2e8f0;
   text-align: center;
 
   &__text {
@@ -130,33 +125,39 @@ ion-content {
   --inner-padding-end: 0;
   --padding-start: 0;
   --min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
 
   &__name {
+    flex: 0 0 110px;
     text-transform: capitalize;
-    flex: 0 0 100px;
     font-weight: 500;
+    color: var(--text-primary);
   }
 
   &__bar {
-    flex-grow: 1;
+    flex-grow: 1; 
     height: 8px;
     background: #e2e8f0;
     border-radius: 4px;
     overflow: hidden;
+    margin: 0 0.5rem; 
   }
 
   &__bar-fill {
     height: 100%;
-    background: #3b82f6; // bg-blue-500
+    background: #3b82f6;
   }
   
   &__value {
-    min-width: 30px;
+    flex: 0 0 30px;
     text-align: right;
+    font-weight: 600;
+    color: var(--text-secondary);
   }
 }
 
-// Botão de Favoritar
 .favorite-fab {
   --background: white;
   margin-top: 0.5rem;
