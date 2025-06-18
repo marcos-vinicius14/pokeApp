@@ -1,0 +1,163 @@
+// Variáveis de Cor
+:host {
+  --background-color: #f1f5f9;
+  --card-background: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+// Estilos do Cabeçalho
+ion-toolbar {
+  --background: #ef4444;
+  --color: #ffffff;
+  ion-title {
+    font-weight: bold;
+  }
+}
+
+// Fundo da página e container principal
+ion-content {
+  --background: var(--background-color);
+}
+
+.details-container {
+  padding: 1rem;
+}
+
+// Spinner de carregamento centralizado
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+// Card principal com a imagem
+.main-card {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+  margin-bottom: 1rem;
+
+  &__image {
+    height: 12rem; // h-48
+    margin: -5rem auto 0 auto; // Efeito "para fora"
+  }
+
+  &__name {
+    font-size: 2.25rem; // text-4xl
+    font-weight: bold;
+    color: var(--text-primary);
+    text-transform: capitalize;
+    margin-top: 1rem;
+  }
+
+  &__id {
+    font-size: 1.125rem; // text-lg
+    color: var(--text-secondary);
+  }
+
+  &__types {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    .type-chip {
+      --background: #e2e8f0; // bg-slate-200
+      --color: #334155; // text-slate-700
+      font-weight: 600;
+      text-transform: capitalize;
+      border-radius: 9999px;
+    }
+  }
+}
+
+// Cards de detalhes genéricos
+.details-card {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 1rem;
+
+  &__title {
+    font-size: 1.25rem; // text-xl
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  &__subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+}
+
+.gemini-button {
+  --background: #2563eb; 
+  --background-hover: #1d4ed8;
+  --background-disabled: #94a3b8;
+  --color: white;
+  --border-radius: 8px;
+  font-weight: bold;
+  text-transform: none;
+}
+
+.gemini-result {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0; 
+  text-align: center;
+
+  &__text {
+    color: var(--text-primary);
+    white-space: pre-line;
+    line-height: 1.6;
+    text-align: left;
+  }
+}
+
+.stats-list {
+  --ion-item-background: transparent;
+  padding: 0;
+}
+
+.stat-item {
+  --inner-padding-end: 0;
+  --padding-start: 0;
+  --min-height: 2.5rem;
+
+  &__name {
+    text-transform: capitalize;
+    flex: 0 0 100px;
+    font-weight: 500;
+  }
+
+  &__bar {
+    flex-grow: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: #3b82f6; // bg-blue-500
+  }
+  
+  &__value {
+    min-width: 30px;
+    text-align: right;
+  }
+}
+
+// Botão de Favoritar
+.favorite-fab {
+  --background: white;
+  margin-top: 0.5rem;
+}

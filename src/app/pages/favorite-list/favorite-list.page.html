@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      Favoritos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  @if (favoritePokemons.length > 0) {
+
+    <ion-list class="favorites-list">
+      @for (pokemon of favoritePokemons; track pokemon.id) {
+        <ion-item [routerLink]="['/pokemons', pokemon.name]" class="favorite-card" lines="none" detail="false">
+        
+          <ion-avatar slot="start" class="favorite-card__avatar">
+            <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}">
+          </ion-avatar>
+          
+          <ion-label class="favorite-card__info">
+            <h2>{{ pokemon.name }}</h2>
+            <p>{{ pokemon.id.toString().padStart(3, '0') }}</p>
+          </ion-label>
+  
+          <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+  
+        </ion-item>
+      }
+    </ion-list>
+
+  } @else {
+
+    <div class="empty-state">
+      <div class="empty-state__card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokébola" class="empty-state__image">
+        <h2 class="empty-state__title">Nenhum Favorito</h2>
+        <p class="empty-state__text">Você ainda não capturou nenhum Pokémon favorito.</p>
+      </div>
+    </div>
+    
+  }
+
+</ion-content>
