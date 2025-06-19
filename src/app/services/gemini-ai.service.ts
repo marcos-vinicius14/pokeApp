@@ -27,9 +27,11 @@ Habilidades: ${abilities}`;
 
     const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
     const payload = { contents: chatHistory };
-    const apiKey = ""; // A chave da API será injetada aqui
+    const apiKey = environment.geminiApiKey
+    const fullApiUrl = `${this.apiUrl}?key=${apiKey}`;
 
-    return this.http.post<any>(`${this.apiUrl}${apiKey}`, payload).pipe(
+
+    return this.http.post<any>(fullApiUrl, payload).pipe(
       map(response => {
         if (response.candidates && response.candidates.length > 0) {
           return response.candidates[0].content.parts[0].text;
