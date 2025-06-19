@@ -22,9 +22,9 @@ import {
   IonLabel,
   IonNote
 } from '@ionic/angular/standalone';
-import { PokemonAbilityInfo } from 'src/app/interfaces/PokemonAbilityInfo';
-import { PokemonTypeInfo } from 'src/app/interfaces/PokemonTypeInfo';
 import { Pokemon } from 'src/app/interfaces/Pokemon';
+import { GeminiAiService } from 'src/app/services/gemini-ai.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -48,7 +48,8 @@ export class PokemonDetailsPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private pokeapiService: PokeapiService,
-    private favoritesService: FavoritesService
+    private favoritesService: FavoritesService,
+    private geminiAiService: GeminiAiService
   ) { }
 
   public ngOnInit(): void {
@@ -91,7 +92,7 @@ export class PokemonDetailsPage implements OnInit {
     this.isFavorite = true;
   }
 
-  public async generatePokedexEntry(): Promise<void> {
+  public generatePokedexEntry(): void {
     if (!this.pokemon || this.isGeneratingEntry) {
       return;
     }
@@ -99,45 +100,16 @@ export class PokemonDetailsPage implements OnInit {
     this.isGeneratingEntry = true;
     this.geminiPokedexEntry = null;
 
-    const types: string = this.pokemon.types.map((t: PokemonTypeInfo) => t.type.name).join(', ');
-    const abilities: string = this.pokemon.abilities.map((a: PokemonAbilityInfo) => a.ability.name).join(', ');
-    const prompt = `Você é um Professor Pokémon, como o Professor Carvalho. Escreva uma entrada de Pokédex cativante e criativa para o Pokémon a seguir. Descreva seu habitat natural, comportamento típico e uma curiosidade surpreendente que poucos conhecem. Mantenha um tom enciclopédico, mas acessível e divertido.
-
----
-
-Nome: ${this.pokemon.name}
-Tipos: ${types}
-Habilidades: ${abilities}`;
-
-    try {
-      const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-      const payload = { contents: chatHistory };
-      const apiKey = "sasa"
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.statusText}`);
+    this.geminiAiService.generatePokedexEntry(this.pokemon).pipe(
+      finalize(() => this.isGeneratingEntry = false)
+    ).subscribe({
+      next: (entry) => {
+        this.geminiPokedexEntry = entry;
+      },
+      error: (err) => {
+        console.error("Erro recebido no componente:", err);
+        this.geminiPokedexEntry = "Não foi possível carregar a descrição da Pokédex.";
       }
-
-      const result = await response.json();
-
-      if (result.candidates && result.candidates.length > 0) {
-        this.geminiPokedexEntry = result.candidates[0].content.parts[0].text;
-      } else {
-        this.geminiPokedexEntry = "Não foi possível gerar a descrição. Tente novamente.";
-      }
-
-    } catch (error) {
-      console.error('Erro ao chamar a API do Gemini:', error);
-      this.geminiPokedexEntry = "Ocorreu um erro de comunicação com a Pokédex. Verifique a conexão e tente novamente.";
-    } finally {
-      this.isGeneratingEntry = false;
-    }
+    });
   }
 }
