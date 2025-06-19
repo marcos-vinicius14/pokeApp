@@ -17,7 +17,7 @@ O projeto foi fortemente baseado no padrão de **Injeção de Dependência (DI)*
 * **Listagem Infinita:** Navegue por uma lista de Pokémon que carrega mais itens conforme você rola a página.
 * **Detalhes Completos:** Veja informações detalhadas de cada Pokémon, incluindo estatísticas, habilidades e tipos.
 * **Sistema de Favoritos:** Marque seus Pokémon preferidos e veja-os em uma lista separada.
-* **Pokédex com IA (Gemini):** Gere descrições criativas e únicas para cada Pokémon, como se fossem escritas por um Professor Pokémon. (Construindo...)
+* **Pokédex com IA (Gemini):** Gere descrições criativas e únicas para cada Pokémon, como se fossem escritas por um Professor Pokémon.
 
 ### Tecnologias Utilizadas
 
