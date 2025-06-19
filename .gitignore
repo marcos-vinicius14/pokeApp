@@ -13,6 +13,8 @@ $RECYCLE.BIN/
 log.txt
 
 
+.env
+
 /.sourcemaps
 /.versions
 /coverage

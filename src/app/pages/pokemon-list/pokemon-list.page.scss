@@ -1,0 +1,63 @@
+// Variáveis
+:host {
+  --background-color: #f1f5f9;
+  --card-background: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --card-shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+}
+
+// Estilo do cabeçalho
+ion-toolbar {
+  --background: #ef4444;
+  --color: #ffffff;
+  ion-title {
+    font-weight: bold;
+  }
+}
+
+// Fundo da página
+ion-content {
+  --background: var(--background-color);
+}
+
+// Estilos da lista e dos cards
+.pokemon-list {
+  background: transparent;
+  padding: 1rem;
+}
+
+.pokemon-card {
+  --background: var(--card-background);
+  --inner-padding-end: 1rem;
+  --padding-start: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  &__avatar {
+    height: 5rem;
+    width: 5rem;
+    margin-right: 1rem;
+  }
+
+  &__info {
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+    p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+  }
+}

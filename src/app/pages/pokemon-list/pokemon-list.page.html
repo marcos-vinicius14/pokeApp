@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      Pokédex
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list class="pokemon-list">
+    @for (pokemon of pokemons(); track pokemon.id) {
+      <ion-item [routerLink]="['/tabs/pokemons', pokemon.name]" class="pokemon-card" lines="none" detail="false">
+        
+        <ion-avatar slot="start" class="pokemon-card__avatar">
+          <img [src]="pokemon.imageUrl" [alt]="pokemon.name" (error)="handleImageError($event)">
+        </ion-avatar>
+        
+        <ion-label class="pokemon-card__info">
+          <h2>{{ pokemon.name }}</h2>
+          <p>#{{ pokemon.id.toString().padStart(3, '0') }}</p>
+        </ion-label>
+
+        <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+
+      </ion-item>
+    }
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="A carregar mais Pokémon...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
