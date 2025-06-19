@@ -1,43 +1,48 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FavoritesService {
   private readonly FAVORITES_KEY = 'pokemonFavorites';
+  
+  private favorites$: BehaviorSubject<number[]>;
 
-  constructor() { }
+  constructor() {
+    this.favorites$ = new BehaviorSubject<number[]>(this.getFavoritesFromStorage());
+  }
+  
+  public getFavoritesObservable(): Observable<number[]> {
+    return this.favorites$.asObservable();
+  }
 
- 
-  getFavorites(): number[] {
+  private getFavoritesFromStorage(): number[] {
     const favorites = localStorage.getItem(this.FAVORITES_KEY);
     return favorites ? JSON.parse(favorites) : [];
   }
 
- 
-  isFavorite(pokemonId: number): boolean {
-    const favorites = this.getFavorites();
-    return favorites.includes(pokemonId);
+  public isFavorite(pokemonId: number): boolean {
+    return this.favorites$.getValue().includes(pokemonId);
   }
 
-  
-  addFavorite(pokemonId: number): void {
-    const favorites = this.getFavorites();
-    if (!favorites.includes(pokemonId)) {
-      favorites.push(pokemonId);
-      this.saveFavorites(favorites);
+  public addFavorite(pokemonId: number): void {
+    const currentFavorites = this.favorites$.getValue();
+    if (!currentFavorites.includes(pokemonId)) {
+      const newFavorites = [...currentFavorites, pokemonId];
+      this.saveFavorites(newFavorites);
     }
   }
 
-
-  removeFavorite(pokemonId: number): void {
-    let favorites = this.getFavorites();
-    favorites = favorites.filter(id => id !== pokemonId);
-    this.saveFavorites(favorites);
+  public removeFavorite(pokemonId: number): void {
+    const currentFavorites = this.favorites$.getValue();
+    const newFavorites = currentFavorites.filter(id => id !== pokemonId);
+    this.saveFavorites(newFavorites);
   }
-
 
   private saveFavorites(favorites: number[]): void {
     localStorage.setItem(this.FAVORITES_KEY, JSON.stringify(favorites));
+    // 3. Notifica todos os "ouvintes" (subscribers) sobre a nova lista
+    this.favorites$.next(favorites);
   }
 }

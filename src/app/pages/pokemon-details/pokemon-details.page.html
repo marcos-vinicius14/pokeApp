@@ -25,13 +25,18 @@
       <div class="main-card">
         <img [src]="officialArtworkUrl" [alt]="pokemon.name" class="main-card__image"/>
         <h1 class="main-card__name">{{ pokemon.name }}</h1>
-        <p class="main-card__id">#{{ pokemon.id.toString().padStart(3, '0') }}</p>
+        <p class="main-card__id">#{{ formattedId }}</p>
 
         <div class="main-card__types">
           @for (typeInfo of pokemon.types; track typeInfo.slot) {
             <ion-chip class="type-chip">{{ typeInfo.type.name }}</ion-chip>
           }
         </div>
+
+        <ion-button (click)="toggleFavorite()" expand="block" fill="outline" class="favorite-button" [class.is-favorite]="isFavorite">
+          <ion-icon [name]="isFavorite ? 'star' : 'star-outline'" slot="start"></ion-icon>
+          {{ isFavorite ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos' }}
+        </ion-button>
       </div>
 
       <div class="details-card">
