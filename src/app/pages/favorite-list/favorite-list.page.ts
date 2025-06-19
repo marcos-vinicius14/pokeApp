@@ -28,7 +28,7 @@ export class FavoritesListPage implements OnInit, OnDestroy {
   constructor(
     private favoritesService: FavoritesService,
     private pokeapiService: PokeapiService
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.favoritesSub = this.favoritesService.getFavoritesObservable().pipe(
@@ -42,6 +42,18 @@ export class FavoritesListPage implements OnInit, OnDestroy {
     ).subscribe(pokemonsDetails => {
       this.favoritePokemons = pokemonsDetails;
     });
+  }
+
+  public getRouterLink(pokemon: Pokemon): string[] {
+    if (pokemon && pokemon.name) {
+      return ['/tabs/pokemons', pokemon.name];
+    }
+    return ['/tabs/pokemons'];
+  }
+
+  public handleImageError(event: Event): void {
+    const element = event.target as HTMLImageElement;
+    element.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
   }
 
   public ngOnDestroy(): void {
