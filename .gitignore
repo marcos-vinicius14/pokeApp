@@ -13,7 +13,7 @@ $RECYCLE.BIN/
 log.txt
 
 .env
-environment.ts
+/src/environments
 
 
 /.sourcemaps
